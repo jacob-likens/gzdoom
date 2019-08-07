@@ -17,6 +17,13 @@ JitFuncPtr JitCompile(VMScriptFunction *sfunc)
 
 	using namespace asmjit;
 	StringLogger logger;
+
+	// Keep annotations to make it easier to process the debug log in case of error.
+	logger.setFlags(
+		FormatOptions::kFlagDebugRA |
+		FormatOptions::kFlagRegCasts |
+		FormatOptions::kFlagAnnotations);
+
 	try
 	{
 		ThrowingErrorHandler errorHandler;

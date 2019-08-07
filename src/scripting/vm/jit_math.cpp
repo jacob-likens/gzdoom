@@ -84,7 +84,7 @@ void JitCompiler::EmitSLL_RR()
 	auto rc = CheckRegD(C, A);
 	if (A != B)
 		cc.mov(regD[A], regD[B]);
-	cc.shl(regD[A], rc);
+	cc.shl(regD[A], rc.r8());
 }
 
 void JitCompiler::EmitSLL_RI()
@@ -98,7 +98,7 @@ void JitCompiler::EmitSLL_KR()
 {
 	auto rc = CheckRegD(C, A);
 	cc.mov(regD[A], konstd[B]);
-	cc.shl(regD[A], rc);
+	cc.shl(regD[A], rc.r8());
 }
 
 void JitCompiler::EmitSRL_RR()
@@ -106,7 +106,7 @@ void JitCompiler::EmitSRL_RR()
 	auto rc = CheckRegD(C, A);
 	if (A != B)
 		cc.mov(regD[A], regD[B]);
-	cc.shr(regD[A], rc);
+	cc.shr(regD[A], rc.r8());
 }
 
 void JitCompiler::EmitSRL_RI()
@@ -120,7 +120,7 @@ void JitCompiler::EmitSRL_KR()
 {
 	auto rc = CheckRegD(C, A);
 	cc.mov(regD[A], konstd[B]);
-	cc.shr(regD[A], rc);
+	cc.shr(regD[A], rc.r8());
 }
 
 void JitCompiler::EmitSRA_RR()
@@ -128,7 +128,7 @@ void JitCompiler::EmitSRA_RR()
 	auto rc = CheckRegD(C, A);
 	if (A != B)
 		cc.mov(regD[A], regD[B]);
-	cc.sar(regD[A], rc);
+	cc.sar(regD[A], rc.r8());
 }
 
 void JitCompiler::EmitSRA_RI()
@@ -142,7 +142,7 @@ void JitCompiler::EmitSRA_KR()
 {
 	auto rc = CheckRegD(C, A);
 	cc.mov(regD[A], konstd[B]);
-	cc.sar(regD[A], rc);
+	cc.sar(regD[A], rc.r8());
 }
 
 void JitCompiler::EmitADD_RR()
@@ -1461,7 +1461,7 @@ void JitCompiler::EmitADDA_RR()
 	cc.je(label);
 
 	auto tmpptr = newTempIntPtr();
-	cc.mov(tmpptr, regD[C]);
+	cc.mov(tmpptr.r32(), regD[C]);
 	cc.add(tmp, tmpptr);
 
 	cc.bind(label);
@@ -1488,8 +1488,9 @@ void JitCompiler::EmitADDA_RK()
 void JitCompiler::EmitSUBA()
 {
 	auto tmp = newTempIntPtr();
-	cc.mov(tmp, regA[B]);
-	cc.sub(tmp, regD[C]);
+	cc.mov(tmp.r32(), regD[C]);
+	cc.sub(tmp, regA[B]);
+	cc.neg(tmp);
 	cc.mov(regA[A], tmp);
 }
 
